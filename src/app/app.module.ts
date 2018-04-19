@@ -7,12 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent }  from './page-not-found.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { UserTableComponent } from './user-table/user-table.component';
+import { NavbarComponent } from './pages/navbar/navbar.component';
+import { UserTableComponent } from './pages/user-table/user-table.component';
 import { AppRoutingModule }  from './app-routing.module';
 
 import { UserService } from './services/user.service';
-import { UserDetailComponent } from './user-detail/user-detail.component';
+import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 
 
 @NgModule({

@@ -1,4 +1,4 @@
-<table class="table" data-pagination="true" data-page-size="2">
+<table id="userTable" class="table table-responsive-lg" data-pagination="true" data-page-size="2">
   <thead class="thead-dark">
     <tr>
       <th scope="col">#</th>
@@ -21,14 +21,11 @@
       <td>{{user.Address}}</td>
       <td>{{user.Phone}}</td>
       <td>
-        <a class="btn btn-success" href="#" role="button">Edit</a>
-        <a class="btn btn-danger" [routerLink]="['/user-detail', user.id]" role="button">Delete</a>
+        <a class="btn btn-success" [routerLink]="['/user-detail', user]" role="button">Edit</a>
+        <a class="btn btn-danger" role="button" (click)="onDelete(user.id)">Delete</a>
       </td>
     </tr>
   </tbody>
 </table>
 
-  <li *ngFor="let user of users" >
-	<a [routerLink]="['/view-detail']">View Detail</a>
-  </li>
 

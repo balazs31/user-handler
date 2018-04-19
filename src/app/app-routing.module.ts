@@ -2,8 +2,8 @@ import { NgModule }      from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PageNotFoundComponent }  from './page-not-found.component';
-import { UserTableComponent }  from './user-table/user-table.component';
-import { UserDetailComponent } from './user-detail/user-detail.component';
+import { UserTableComponent }  from './pages//user-table/user-table.component';
+import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 
 const routes: Routes = [
     { path: 'users', component: UserTableComponent },
