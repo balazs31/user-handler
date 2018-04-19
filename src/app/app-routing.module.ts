@@ -6,8 +6,9 @@ import { UserTableComponent }  from './pages//user-table/user-table.component';
 import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 
 const routes: Routes = [
-    { path: 'users', component: UserTableComponent },
-	{ path: 'user-detail/:id', component: UserDetailComponent }, 
+  { path: 'users', component: UserTableComponent },
+  { path: 'user-detail/:id', component: UserDetailComponent }, 
+  { path: 'user-detail', component: UserDetailComponent},
 	{ path: '', redirectTo: '/users', pathMatch: 'full' },
 	{ path: '**', component: PageNotFoundComponent }
 ];

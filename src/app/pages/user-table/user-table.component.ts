@@ -12,11 +12,10 @@ declare var swal: any;
 export class UserTableComponent {
   users: User[] = [];
 
-  constructor(private userService: UserService, private cd: ChangeDetectorRef) { }
+  constructor(private userService: UserService) { }
   
   ngOnInit() {
     this.getUsers();
-    this.cd.detectChanges();
   }
 
   getUsers() : void {

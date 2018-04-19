@@ -26,8 +26,7 @@ export class UserService {
   }
 
   public findUserById(userId: Number): Observable<User> { 
-    return this.http.get('http://localhost:3000/api/People/findOne', {params: {filer: {id: userId}}})
-      .map((res:Response) => res.json());
+    return this.httpClient.get<User>('http://localhost:3000/api/People/' + userId)
   }
 
 

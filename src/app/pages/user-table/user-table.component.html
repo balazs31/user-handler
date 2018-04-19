@@ -21,7 +21,7 @@
       <td>{{user.Address}}</td>
       <td>{{user.Phone}}</td>
       <td>
-        <a class="btn btn-success" [routerLink]="['/user-detail', user]" role="button">Edit</a>
+        <a class="btn btn-success" [routerLink]="['/user-detail', user.id]" role="button">Edit</a>
         <a class="btn btn-danger" role="button" (click)="onDelete(user.id)">Delete</a>
       </td>
     </tr>
