@@ -1,28 +1,29 @@
-<table id="userTable" class="table table-responsive-lg" data-pagination="true" data-page-size="2">
+<div class="row text-right">
+  <div class="col">
+    <input #search class="form-control search input-sm" type="text" placeholder="Search..." (keyup)="onSearch(search.value)">
+  </div>
+  <div class="col text-right">
+    <a class="btn btn-success" [routerLink]="['/user-detail/', 'add']" role="button">Add user</a>
+  </div>
+</div>
+  <table id="userTable" class="table table-responsive-lg">
   <thead class="thead-dark">
     <tr>
-      <th scope="col">#</th>
-      <th scope="col">Username</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Email</th>
-      <th scope="col">Address</th>
-      <th scope="col">Phone</th>
-      <th scope="col">Modify user</th>
+      <th *ngFor="let column of columns" scope="col">{{column}}</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of users">
+    <tr *ngFor="let user of filteredUsers">
       <th scope="row">{{user.id}}</th>
-      <td>{{user.Username}}</td>
-      <td>{{user.Firstname}}</td>
-      <td>{{user.Lastname}}</td>
-      <td>{{user.Email}}</td>
-      <td>{{user.Address}}</td>
-      <td>{{user.Phone}}</td>
+      <td>{{user.username}}</td>
+      <td>{{user.firstName}}</td>
+      <td>{{user.lastName}}</td>
+      <td>{{user.email}}</td>
+      <td>{{user.location}}</td>
+      <td>{{user.phone}}</td>
       <td>
-        <a class="btn btn-success" [routerLink]="['/user-detail', user.id]" role="button">Edit</a>
-        <a class="btn btn-danger" role="button" (click)="onDelete(user.id)">Delete</a>
+        <a class="btn btn-success" [routerLink]="['/user-detail/', 'edit', user.id]" role="button">Edit</a>
+        <a class="btn btn-danger" role="button" (click)="onDelete(user)">Delete</a>
       </td>
     </tr>
   </tbody>

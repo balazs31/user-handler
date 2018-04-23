@@ -1,3 +1,64 @@
-<p>
-  user-detail works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="btn-group-wrap text-center">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" >
+          <label class="btn btn-primary btn-lg"  [routerLink]="['/user-detail/', 'edit', userId]" [ngClass]="{'active focus': action.value==action.options.edit}">
+            <input type="radio" name="options" id="option1" [value]="editUser"> Edit user
+          </label>
+          <label class="btn btn-primary btn-lg"  [routerLink]="['/user-detail/', 'add', userId]" [ngClass]="{'active focus': action.value==action.options.add}">
+            <input type="radio" name="options" id="option2" [value]="addUser"> Add user
+          </label>
+        </div>
+      </div>
+      <h1>{{action.currentTitle}}</h1>
+      <form *ngIf='user' (ngSubmit)='updateOrCreate()'>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" id="username" [(ngModel)]='user.username' [disabled]="action.value==action.options.edit"  required>
+          </div>
+        <div class="form-group">
+          <label for="firstname">First name</label>
+          <input type="text" class="form-control" name="firstname" id="firstname" [(ngModel)]='user.firstName' [disabled]="action.value==action.options.edit" required>
+        </div>
+
+        <div class="form-group">
+          <label for="lastname">Last name</label>
+          <input type="text" class="form-control" name="lastname" id="lastname" [(ngModel)]='user.lastName' >
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" class="form-control" name="email" id="email" [(ngModel)]='user.email' required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" name="phone" id="phone" [(ngModel)]='user.phone' required>
+          </div>
+
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" class="form-control" name="location" id="location" [(ngModel)]='user.location' required>
+        </div>
+
+        <div class="form-group">
+          <label for="current-password">Current password</label>
+          <input type="password" class="form-control" name="current-password" id="current-password" [(ngModel)]='user.password' required>
+        </div>
+
+        <div class="form-group">
+          <label for="new-password">New password</label>
+          <input type="password" class="form-control" name="new-password" id="new-password">
+        </div>
+
+        <div class="form-group">
+          <label for="repeat-new-password">Repeat new password</label>
+          <input type="password" class="form-control" name="repeat-new-password" id="repeat-new-password">
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>

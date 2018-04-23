@@ -11,7 +11,8 @@ declare var swal: any;
 })
 export class UserTableComponent {
   users: User[] = [];
-
+  filteredUsers: User[];
+  columns: Array<string> = ["#", "Username", "First", "Last", "Email", "Location", "Phone", "Modify"];
   constructor(private userService: UserService) { }
   
   ngOnInit() {
@@ -21,13 +22,14 @@ export class UserTableComponent {
   getUsers() : void {
     this.userService.getUsers().subscribe(((users) => {
       for(let user of users) {
-        this.users.push(new User().fromJSON(user));
-        console.log(new User().fromJSON(user));
+        this.users.push(this.userService.createUserObject(user));
       }
+
+      this.filteredUsers = this.users;
     }));
   }
 
-  onDelete(userId: Number): void {
+  onDelete(user: User): void {
     swal({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -37,18 +39,8 @@ export class UserTableComponent {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
-        // this.mountainService.deleteMountain(this.mountainId)
-        //   .subscribe((response: Response) => {
-        //     swal(
-        //         'Deleted!',
-        //         'Your file has been deleted.',
-        //         'success'
-        //     );
-        //     this.router.navigate(['../'], {relativeTo: this.route});
-        //   });
         if(result.value) {
-          console.log('hello')
-          this.userService.deleteUser(userId)
+          this.userService.deleteUser(user.id)
           .subscribe((response) => {
             if(response.status == 200) {
               swal(
@@ -56,6 +48,10 @@ export class UserTableComponent {
                   'User has been deleted.',
                   'success'
               );
+
+            
+              let index = this.filteredUsers.indexOf(user);
+              this.filteredUsers.splice(index, 1);
             } 
           }, (err) => {
             swal(
@@ -64,10 +60,18 @@ export class UserTableComponent {
               'error'
           );
           });
-        }
+        }   
+    });
+  }
 
+  onSearch(query: string): void {
+    this.filteredUsers = [];
 
-       
-  });
+    console.log('Users to string: ', this.users.toString )
+    for(let user of this.users) {
+      if(user.toString().indexOf(query) >= 0) {
+        this.filteredUsers.push(user);
+      }
+    }
   }
 }

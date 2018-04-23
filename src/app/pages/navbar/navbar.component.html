@@ -9,7 +9,7 @@
             <a class="nav-link" routerLink="/users" routerLinkActive="active active-link">Users</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="/user-detail" routerLinkActive="active active-link">Edit/Add</a>
+            <a class="nav-link" [routerLink]="['/user-detail/', 'edit']" routerLinkActive="active active-link">Edit/Add</a>
         </li>
       </ul>
     </div>
