@@ -1,11 +1,12 @@
-<div class="row text-right">
+<div class="row">
   <div class="col">
     <input #search class="form-control search input-sm" type="text" placeholder="Search..." (keyup)="onSearch(search.value)">
   </div>
-  <div class="col text-right">
+  <div class="col">
     <a class="btn btn-success" [routerLink]="['/user-detail/', 'add']" role="button">Add user</a>
   </div>
 </div>
+<div class="row">
   <table id="userTable" class="table table-responsive-lg">
   <thead class="thead-dark">
     <tr>
@@ -27,6 +28,7 @@
       </td>
     </tr>
   </tbody>
-</table>
+  </table>
+  </div>
 
 

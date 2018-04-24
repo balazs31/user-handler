@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user';
+import { ValidateUsernameNotTaken } from '../../validators/username.validator';
+import { ValidateEmailNotTaken } from '../../validators/email.validator';
+import { Subject } from 'rxjs/Subject';
 
 declare var swal: any;
 
@@ -15,7 +19,11 @@ export class UserDetailComponent implements OnInit {
   private userId: number;
   private role: string;
   private action = <any>{};
-  constructor(private route: ActivatedRoute, private userService: UserService) {
+  private searchTerm$ = new Subject<string>();
+  private userSearchResult: Object = [];
+  private userForm : FormGroup;
+  private isDisabled: boolean;
+  constructor(private route: ActivatedRoute, private userService: UserService, private fb: FormBuilder) {
     this.action = {
       value: 'editUser',
       options: {
@@ -28,12 +36,15 @@ export class UserDetailComponent implements OnInit {
       },
       currentTitle: 'Edit user'
     }
+
+    this.userService.searchUserByUsername(this.searchTerm$)
+      .subscribe(results => {
+        this.userSearchResult = results;
+    })
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      
-
       this.userId = +params['id']; 
       this.role = params['role'];
       if (this.role == 'edit') {
@@ -41,11 +52,21 @@ export class UserDetailComponent implements OnInit {
         if(params['id']) {
           if(!Number.isNaN(this.userId)) {
             this.findUserById(this.userId);
+          } else {
+            this.user = new User(NaN, "", "", "", "", "", "", "")
+            this.createUserForm();
+
           }
+        } else {
+          this.user = new User(NaN, "", "", "", "", "", "", "")
+          this.createUserForm();
+
         }
       } else if(this.role == 'add') {
         this.action.value = this.action.options.add;
+
         this.user = new User(NaN, "", "", "", "", "", "", "")
+        this.createUserForm();
       }
       this.setCurrentTitle(this.action.value);
     });
@@ -55,14 +76,27 @@ export class UserDetailComponent implements OnInit {
   private findUserById(userId): void {
     this.userService.findUserById(userId).subscribe((user) => {
       this.user = this.userService.createUserObject(user);
+      this.createUserForm();
       console.log(this.user);
     });
   }
+
+  private createUserForm(): void {
+    this.userForm = this.fb.group({
+      'username': [this.user.username, Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(20), Validators.pattern('^([a-zA-Z0-9_]){4,20}')]), ValidateUsernameNotTaken.createValidator(this.userService)],
+      'firstName': [this.user.firstName, Validators.compose([Validators.required, Validators.minLength(2)])],
+      'lastName': [this.user.lastName, Validators.compose([Validators.required, Validators.minLength(2)])],
+      'password': [this.user.password, Validators.compose([Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&+])[A-Za-z\d$@$!%*?&+]{8,}/)])],
+      'location': this.user.location,
+      'email': [ this.user.email, Validators.compose([Validators.required, Validators.email]), ValidateEmailNotTaken.createValidator(this.userService)],
+      'phone': [this.user.phone, Validators.compose([Validators.required, Validators.minLength(2), Validators.maxLength(20), Validators.pattern(/^\+[0-9]{8,12}|^[0-9]{7,12}/)])], 
+    })
+    }
   
   private setCurrentTitle(title): void {
     this.action.currentTitle = title == this.action.options.edit ? this.action.titles.edit : this.action.titles.add;
   }
-
+s
 
   public updateOrCreate(): void {
     this.userService.updateUser(this.user).subscribe((response) => {
@@ -71,6 +105,12 @@ export class UserDetailComponent implements OnInit {
           'Updated!',
           'User has been updated.',
           'success'
+      );
+      } else {
+        swal(
+          'Whoops!',
+          'Something went wrong. Please try later!',
+          'error'
       );
       }
     }); 
