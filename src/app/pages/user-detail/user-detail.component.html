@@ -21,8 +21,6 @@
             <div *ngIf="userForm.controls['username'].hasError('maxlength') && userForm.controls['username'].touched" class="alert alert-danger">Max 20 characters long</div>
             <div *ngIf="userForm.controls['username'].hasError('pattern') && userForm.controls['username'].touched" class="alert alert-danger">Can only contain lowercase, uppercase letters, numbers and the _ symbol</div>
             <div *ngIf="userForm.get('username').errors && userForm.get('username').errors.usernameTaken && action.value == action.options.add && userForm.controls['username'].touched" class="alert alert-danger">Username already in use</div>
-            <!-- <div *ngIf="userSearchResult.length != 0 && action.value == action.options.add && userForm.controls['username'].touched" class="alert alert-danger">Username already in use</div> -->
-              {{userForm.get('username').errors | json}}
           </div>
           
         <div class="form-group">

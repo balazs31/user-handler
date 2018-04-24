@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
+import { LocationService } from '../../services/location.service';
 import { User } from '../../models/user';
 import { ValidateUsernameNotTaken } from '../../validators/username.validator';
 import { ValidateEmailNotTaken } from '../../validators/email.validator';
@@ -22,8 +23,12 @@ export class UserDetailComponent implements OnInit {
   private searchTerm$ = new Subject<string>();
   private userSearchResult: Object = [];
   private userForm : FormGroup;
-  private isDisabled: boolean;
-  constructor(private route: ActivatedRoute, private userService: UserService, private fb: FormBuilder) {
+  private currentLocation: string;
+  constructor(
+    private locationService: LocationService, 
+    private userService: UserService, 
+    private route: ActivatedRoute, 
+    private fb: FormBuilder) {
     this.action = {
       value: 'editUser',
       options: {
@@ -41,9 +46,16 @@ export class UserDetailComponent implements OnInit {
       .subscribe(results => {
         this.userSearchResult = results;
     })
+
+    this.locationService.getCurrentIpLocation()
+      .subscribe(location => {
+        this.currentLocation = location.city;
+      });
+      
   }
 
   ngOnInit() {
+   
     this.route.params.subscribe(params => {
       this.userId = +params['id']; 
       this.role = params['role'];
@@ -53,20 +65,14 @@ export class UserDetailComponent implements OnInit {
           if(!Number.isNaN(this.userId)) {
             this.findUserById(this.userId);
           } else {
-            this.user = new User(NaN, "", "", "", "", "", "", "")
-            this.createUserForm();
-
+            this.switchToAddUser();
           }
         } else {
-          this.user = new User(NaN, "", "", "", "", "", "", "")
-          this.createUserForm();
-
+          this.switchToAddUser();
         }
       } else if(this.role == 'add') {
         this.action.value = this.action.options.add;
-
-        this.user = new User(NaN, "", "", "", "", "", "", "")
-        this.createUserForm();
+        this.switchToAddUser();
       }
       this.setCurrentTitle(this.action.value);
     });
@@ -96,7 +102,12 @@ export class UserDetailComponent implements OnInit {
   private setCurrentTitle(title): void {
     this.action.currentTitle = title == this.action.options.edit ? this.action.titles.edit : this.action.titles.add;
   }
-s
+
+  private switchToAddUser() {
+    this.user = new User(NaN, "", "", "", "", this.currentLocation, "", "")
+    console.log('Location: ', this.currentLocation)
+    this.createUserForm();
+  }
 
   public updateOrCreate(): void {
     this.userService.updateUser(this.user).subscribe((response) => {

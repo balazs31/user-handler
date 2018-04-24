@@ -12,6 +12,7 @@ import { UserTableComponent } from './pages/user-table/user-table.component';
 import { AppRoutingModule }  from './app-routing.module';
 
 import { UserService } from './services/user.service';
+import { LocationService } from './services/location.service'
 import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 
 
@@ -31,7 +32,7 @@ import { UserDetailComponent } from './pages/user-detail/user-detail.component';
     HttpModule,
     HttpClientModule
   ],
-  providers: [ UserService ],
-  bootstrap: [AppComponent]
+  providers: [ UserService, LocationService ],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }
