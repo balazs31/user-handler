@@ -13,6 +13,7 @@ import { AppRoutingModule }  from './app-routing.module';
 
 import { UserService } from './services/user.service';
 import { LocationService } from './services/location.service'
+import { WeatherService } from './services/weather.service'
 import { UserDetailComponent } from './pages/user-detail/user-detail.component';
 
 
@@ -32,7 +33,7 @@ import { UserDetailComponent } from './pages/user-detail/user-detail.component';
     HttpModule,
     HttpClientModule
   ],
-  providers: [ UserService, LocationService ],
+  providers: [ UserService, LocationService, WeatherService ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

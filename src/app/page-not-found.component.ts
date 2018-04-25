@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component } from "@angular/core";
+import { Location } from "@angular/common";
 
 @Component({
   template: `<h2>Page Not Found.</h2>
@@ -9,8 +9,8 @@ import { Location } from '@angular/common';
             `
 })
 export class PageNotFoundComponent {
-	constructor(private location: Location) { }
-	goBack(): void {
-        this.location.back();
-    }
+  constructor(private location: Location) {}
+  goBack(): void {
+    this.location.back();
+  }
 }

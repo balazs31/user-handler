@@ -2,27 +2,35 @@
   <div class="row">
     <div class="col">
       <div class="btn-group-wrap text-center">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons" >
-          <label class="btn btn-primary btn-lg"  [routerLink]="['/user-detail/', 'edit', userId]" [ngClass]="{'active focus': action.value==action.options.edit}">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-primary btn-md" [routerLink]="['/user-detail/', 'edit', userId]" [ngClass]="{'active focus': action.value==action.options.edit}">
             <input type="radio" name="options" id="option1" [value]="editUser"> Edit user
           </label>
-          <label class="btn btn-primary btn-lg"  [routerLink]="['/user-detail/', 'add', userId]" [ngClass]="{'active focus': action.value==action.options.add}">
+          <label class="btn btn-primary btn-md" [routerLink]="['/user-detail/', 'add', userId]" [ngClass]="{'active focus': action.value==action.options.add}">
             <input type="radio" name="options" id="option2" [value]="addUser"> Add user
           </label>
         </div>
       </div>
+
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
       <h1>{{action.currentTitle}}</h1>
       <form *ngIf='user' [formGroup]="userForm" (ngSubmit)="updateOrCreate(userForm.value)">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" name="username" id="username" (keyup)="searchTerm$.next($event.target.value)"  [formControl]="userForm.controls['username']" [readonly]="action.value==action.options.edit">
-            <div *ngIf="userForm.controls['username'].hasError('required') && userForm.controls['username'].touched" class="alert alert-danger">Field is required</div>
-            <div *ngIf="userForm.controls['username'].hasError('minlength') && userForm.controls['username'].touched" class="alert alert-danger">At least 4 characters long</div>
-            <div *ngIf="userForm.controls['username'].hasError('maxlength') && userForm.controls['username'].touched" class="alert alert-danger">Max 20 characters long</div>
-            <div *ngIf="userForm.controls['username'].hasError('pattern') && userForm.controls['username'].touched" class="alert alert-danger">Can only contain lowercase, uppercase letters, numbers and the _ symbol</div>
-            <div *ngIf="userForm.get('username').errors && userForm.get('username').errors.usernameTaken && action.value == action.options.add && userForm.controls['username'].touched" class="alert alert-danger">Username already in use</div>
-          </div>
-          
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" name="username" id="username" (keyup)="searchTerm$.next($event.target.value)" [formControl]="userForm.controls['username']"
+            [readonly]="action.value==action.options.edit">
+          <div *ngIf="userForm.controls['username'].hasError('required') && userForm.controls['username'].touched" class="alert alert-danger">Field is required</div>
+          <div *ngIf="userForm.controls['username'].hasError('minlength') && userForm.controls['username'].touched" class="alert alert-danger">At least 4 characters long</div>
+          <div *ngIf="userForm.controls['username'].hasError('maxlength') && userForm.controls['username'].touched" class="alert alert-danger">Max 20 characters long</div>
+          <div *ngIf="userForm.controls['username'].hasError('pattern') && userForm.controls['username'].touched" class="alert alert-danger">Can only contain lowercase, uppercase letters, numbers and the _ symbol</div>
+          <div *ngIf="userForm.get('username').errors && userForm.get('username').errors.usernameTaken && action.value == action.options.add && userForm.controls['username'].touched"
+            class="alert alert-danger">Username already in use</div>
+        </div>
+
         <div class="form-group">
           <label for="firstname">First name</label>
           <input type="text" class="form-control" name="firstname" id="firstname" [formControl]="userForm.controls['firstName']" [readonly]="action.value==action.options.edit">
@@ -32,7 +40,7 @@
 
         <div class="form-group">
           <label for="lastname">Last name</label>
-          <input type="text" class="form-control" name="lastname" id="lastname" [formControl]="userForm.controls['lastName']" >
+          <input type="text" class="form-control" name="lastname" id="lastname" [formControl]="userForm.controls['lastName']">
           <div *ngIf="userForm.controls['lastName'].hasError('required') && userForm.controls['lastName'].touched" class="alert alert-danger">Field is required</div>
           <div *ngIf="userForm.controls['lastName'].hasError('minlength') && userForm.controls['lastName'].touched" class="alert alert-danger">At least 2 characters long</div>
         </div>
@@ -56,29 +64,68 @@
           <input type="text" class="form-control" name="location" id="location" [formControl]="userForm.controls['location']">
         </div>
 
-        <div class="form-group">
+        <div *ngIf="action.value == action.options.edit" class="form-group">
           <label for="current-password">Current password</label>
-          <input type="password" class="form-control" name="current-password" id="current-password" [formControl]="userForm.controls['password']">
-          <div *ngIf="userForm.controls['password'].hasError('required') && userForm.controls['password'].touched" class="alert alert-danger">Field is required</div>
-          <div *ngIf="userForm.controls['password'].hasError('pattern') && userForm.controls['password'].touched" class="alert alert-danger">
+          <input type="password" class="form-control" name="current-password" id="current-password" [formControl]="userForm.controls['currentPassword']">
+          <div *ngIf="userForm.controls['currentPassword'].hasError('required') && userForm.controls['currentPassword'].touched" class="alert alert-danger">Field is required</div>
+          <div *ngIf="userForm.controls['currentPassword'].hasError('pattern') && userForm.controls['currentPassword'].touched" class="alert alert-danger">
             <li>Minimum length: 8 cahracters</li>
             <li>At least one special symbol</li>
             <li>At least one lowercase and uppercase letter</li>
           </div>
         </div>
+        <div formGroupName="newPasswords">
+          <div class="form-group">
+            <label for="new-password">New password</label>
+            <input type="password" class="form-control" name="new-password" id="new-password" [formControl]="userForm.controls['newPasswords'].controls['newPassword1']">
+            <div *ngIf="userForm.controls['newPasswords'].controls['newPassword1'].hasError('required') && userForm.controls['newPasswords'].controls['newPassword1'].touched"
+              class="alert alert-danger">Field is required</div>
+          </div>
 
-        <div class="form-group">
-          <label for="new-password">New password</label>
-          <input type="password" class="form-control" name="new-password" id="new-password">
+          <div class="form-group">
+            <label for="repeat-new-password">Repeat new password</label>
+            <input type="password" class="form-control" name="repeat-new-password" id="repeat-new-password" [formControl]="userForm.controls['newPasswords'].controls['newPassword2']">
+            <div *ngIf="userForm.controls['newPasswords'].controls['newPassword2'].hasError('required') && userForm.controls['newPasswords'].controls['newPassword2'].touched"
+              class="alert alert-danger">Field is required</div>
+
+          </div>
         </div>
-
-        <div class="form-group">
-          <label for="repeat-new-password">Repeat new password</label>
-          <input type="password" class="form-control" name="repeat-new-password" id="repeat-new-password">
-        </div>
-
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-success" [disabled]='!userForm.valid'>Submit</button>
       </form>
     </div>
+    <div *ngIf="weather" class="col-md-6 col-sm-2 text-center">
+      <div class="weather-card one">
+        <div class="top">
+          <div class="wrapper">
+            <h1 class="heading">{{weather.currently.summary}}</h1>
+            <h3 class="location">{{currentLocation.city}}</h3>
+            <p class="temp">
+              <span class="temp-value">{{weather.currently.temperature | number:'1.0-0'}}</span>
+              <span class="deg">0</span>
+              <a>
+                <span class="temp-type">C</span>
+              </a>
+            </p>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="wrapper">
+            <ul class="forecast">
+              <li class="active">
+                <span class="date">Tomorrow</span>
+                <span class="condition">
+                  <span class="temp">{{weather.daily.data[0].temperatureHigh | number:'1.0-0'}}
+                    <span class="deg">0</span>
+                    <span class="temp-type">C</span>
+                  </span>
+                </span>
+                <!-- <div class="row"> -->
+                <span class="summary">{{weather.daily.data[0].summary}}</span>
+                <!-- </div> -->
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
