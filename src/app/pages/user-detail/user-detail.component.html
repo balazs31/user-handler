@@ -3,10 +3,10 @@
     <div class="col">
       <div class="btn-group-wrap text-center">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-primary btn-md" [routerLink]="['/user-detail/', 'edit', userId]" [ngClass]="{'active focus': action.value==action.options.edit}">
+          <label class="btn btn-primary" [routerLink]="['/user-detail/', 'edit', userId]" [ngClass]="{'active focus': action.value==action.options.edit}">
             <input type="radio" name="options" id="option1" [value]="editUser"> Edit user
           </label>
-          <label class="btn btn-primary btn-md" [routerLink]="['/user-detail/', 'add', userId]" [ngClass]="{'active focus': action.value==action.options.add}">
+          <label class="btn btn-primary" [routerLink]="['/user-detail/', 'add', userId]" [ngClass]="{'active focus': action.value==action.options.add}">
             <input type="radio" name="options" id="option2" [value]="addUser"> Add user
           </label>
         </div>
@@ -21,81 +21,87 @@
       <form *ngIf='user' [formGroup]="userForm" (ngSubmit)="updateOrCreate(userForm.value)">
         <div class="form-group">
           <label for="username">Username</label>
-          <input type="text" class="form-control" name="username" id="username" (keyup)="searchTerm$.next($event.target.value)" [formControl]="userForm.controls['username']"
-            [readonly]="action.value==action.options.edit">
-          <div *ngIf="userForm.controls['username'].hasError('required') && userForm.controls['username'].touched" class="alert alert-danger">Field is required</div>
-          <div *ngIf="userForm.controls['username'].hasError('minlength') && userForm.controls['username'].touched" class="alert alert-danger">At least 4 characters long</div>
-          <div *ngIf="userForm.controls['username'].hasError('maxlength') && userForm.controls['username'].touched" class="alert alert-danger">Max 20 characters long</div>
-          <div *ngIf="userForm.controls['username'].hasError('pattern') && userForm.controls['username'].touched" class="alert alert-danger">Can only contain lowercase, uppercase letters, numbers and the _ symbol</div>
-          <div *ngIf="userForm.get('username').errors && userForm.get('username').errors.usernameTaken && action.value == action.options.add && userForm.controls['username'].touched"
-            class="alert alert-danger">Username already in use</div>
+          <input type="text" class="form-control" name="username" id="username" [formControl]="userForm.controls['username']" [readonly]="action.value==action.options.edit">
+          <div *ngIf="userForm.controls['username'].hasError('required') && userForm.controls['username'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+          <div *ngIf="userForm.controls['username'].hasError('minlength') && userForm.controls['username'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.USERNAME.MIN_LENGTH}}</div>
+          <div *ngIf="userForm.controls['username'].hasError('maxlength') && userForm.controls['username'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.USERNAME.MAX_LENGTH}}</div>
+          <div *ngIf="userForm.controls['username'].hasError('pattern') && userForm.controls['username'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.USERNAME.PATTERN}}</div>
+          <div *ngIf="userForm.get('username').errors && userForm.get('username').errors.usernameTaken" class="alert alert-danger">{{VALIDATOR_MESSAGES.USERNAME.TAKEN}}</div>
         </div>
 
         <div class="form-group">
           <label for="firstname">First name</label>
           <input type="text" class="form-control" name="firstname" id="firstname" [formControl]="userForm.controls['firstName']" [readonly]="action.value==action.options.edit">
-          <div *ngIf="userForm.controls['firstName'].hasError('required') && userForm.controls['firstName'].touched" class="alert alert-danger">Field is required</div>
-          <div *ngIf="userForm.controls['firstName'].hasError('minlength') && userForm.controls['firstName'].touched" class="alert alert-danger">At least 2 characters long</div>
+          <div *ngIf="userForm.controls['firstName'].hasError('required') && userForm.controls['firstName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+          <div *ngIf="userForm.controls['lastName'].hasError('minlength') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.FIRST_NAME.MIN_LENGTH}}</div>
+          <div *ngIf="userForm.controls['lastName'].hasError('pattern') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.FIRST_NAME.PATTERN}}</div>
         </div>
 
         <div class="form-group">
           <label for="lastname">Last name</label>
           <input type="text" class="form-control" name="lastname" id="lastname" [formControl]="userForm.controls['lastName']">
-          <div *ngIf="userForm.controls['lastName'].hasError('required') && userForm.controls['lastName'].touched" class="alert alert-danger">Field is required</div>
-          <div *ngIf="userForm.controls['lastName'].hasError('minlength') && userForm.controls['lastName'].touched" class="alert alert-danger">At least 2 characters long</div>
+          <div *ngIf="userForm.controls['lastName'].hasError('required') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+          <div *ngIf="userForm.controls['lastName'].hasError('minlength') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.LAST_NAME.MIN_LENGTH}}</div>
+          <div *ngIf="userForm.controls['lastName'].hasError('pattern') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.LAST_NAME.PATTERN}}</div>
         </div>
 
         <div class="form-group">
           <label for="email">Email</label>
           <input type="text" class="form-control" name="email" id="email" [formControl]="userForm.controls['email']">
-          <div *ngIf="userForm.controls['email'].hasError('required') && userForm.controls['email'].touched" class="alert alert-danger">Email address is required</div>
-          <div *ngIf="userForm.controls['email'].hasError('email') && userForm.controls['email'].touched" class="alert alert-danger">Invalid email address</div>
+          <div *ngIf="userForm.controls['email'].hasError('required') && userForm.controls['email'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+          <div *ngIf="userForm.controls['email'].hasError('email') && userForm.controls['email'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.EMAIL.PATTERN}}</div>
+          <div *ngIf="userForm.controls['email'].hasError('email') && userForm.controls['email'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.EMAIL.PATTERN}}</div>
+          <div *ngIf="userForm.get('email').errors && userForm.get('email').errors.emailTaken" class="alert alert-danger">{{VALIDATOR_MESSAGES.EMAIL.TAKEN}}</div>
         </div>
 
         <div class="form-group">
           <label for="phone">Phone</label>
           <input type="text" class="form-control" name="phone" id="phone" [formControl]="userForm.controls['phone']">
-          <div *ngIf="userForm.controls['phone'].hasError('required') && userForm.controls['phone'].touched" class="alert alert-danger">Field is required</div>
-          <div *ngIf="userForm.controls['phone'].hasError('pattern') && userForm.controls['phone'].touched" class="alert alert-danger">Invalid phone number</div>
+          <div *ngIf="userForm.controls['phone'].hasError('required') && userForm.controls['phone'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+          <div *ngIf="userForm.controls['phone'].hasError('pattern') && userForm.controls['phone'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.PHONE.PATTERN}}</div>
         </div>
 
         <div class="form-group">
           <label for="location">Location</label>
           <input type="text" class="form-control" name="location" id="location" [formControl]="userForm.controls['location']">
+          <div *ngIf="userForm.controls['location'].hasError('required') && userForm.controls['location'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
         </div>
 
         <div *ngIf="action.value == action.options.edit" class="form-group">
           <label for="current-password">Current password</label>
           <input type="password" class="form-control" name="current-password" id="current-password" [formControl]="userForm.controls['currentPassword']">
-          <div *ngIf="userForm.controls['currentPassword'].hasError('required') && userForm.controls['currentPassword'].touched" class="alert alert-danger">Field is required</div>
-          <div *ngIf="userForm.controls['currentPassword'].hasError('pattern') && userForm.controls['currentPassword'].touched" class="alert alert-danger">
-            <li>Minimum length: 8 cahracters</li>
-            <li>At least one special symbol</li>
-            <li>At least one lowercase and uppercase letter</li>
-          </div>
+          <div *ngIf="userForm.controls['currentPassword'].hasError('required') && userForm.controls['currentPassword'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+          <div *ngIf="userForm.controls['currentPassword'].hasError('matchCurrentPassword') && userForm.controls['currentPassword'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.CURRENT_PASSWORD.INCORRECT}}</div>
         </div>
         <div formGroupName="newPasswords">
           <div class="form-group">
             <label for="new-password">New password</label>
             <input type="password" class="form-control" name="new-password" id="new-password" [formControl]="userForm.controls['newPasswords'].controls['newPassword1']">
             <div *ngIf="userForm.controls['newPasswords'].controls['newPassword1'].hasError('required') && userForm.controls['newPasswords'].controls['newPassword1'].touched"
-              class="alert alert-danger">Field is required</div>
+              class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+            <div *ngIf="userForm.controls['newPasswords'].controls['newPassword1'].hasError('pattern') && userForm.controls['newPasswords'].controls['newPassword1'].touched"
+              class="alert alert-danger">{{VALIDATOR_MESSAGES.NEW_PASSWORD_1.PATTERN}}</div>
+            <div *ngIf="userForm.controls['newPasswords'].controls['newPassword1'].errors && userForm.controls['newPasswords'].controls['newPassword1'].errors.matchCurrentPassword && userForm.controls['newPasswords'].controls['newPassword1'].touched"
+              class="alert alert-danger">{{VALIDATOR_MESSAGES.NEW_PASSWORD_1.PASSWORD_NOT_MATCH_CURRENT}}</div>
           </div>
 
           <div class="form-group">
             <label for="repeat-new-password">Repeat new password</label>
             <input type="password" class="form-control" name="repeat-new-password" id="repeat-new-password" [formControl]="userForm.controls['newPasswords'].controls['newPassword2']">
             <div *ngIf="userForm.controls['newPasswords'].controls['newPassword2'].hasError('required') && userForm.controls['newPasswords'].controls['newPassword2'].touched"
-              class="alert alert-danger">Field is required</div>
+              class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
+            <div *ngIf="userForm.controls['newPasswords'].controls['newPassword2'].errors && userForm.controls['newPasswords'].controls['newPassword2'].errors.matchPassword && userForm.controls['newPasswords'].controls['newPassword2'].touched"
+              class="alert alert-danger">{{VALIDATOR_MESSAGES.NEW_PASSWORD_2.PASSWORDS_NOT_MATCH}}</div>
 
           </div>
         </div>
         <button type="submit" class="btn btn-success" [disabled]='!userForm.valid'>Submit</button>
       </form>
     </div>
+
     <div *ngIf="weather" class="col-md-6 col-sm-2 text-center">
-      <div class="weather-card one">
-        <div class="top">
+      <div class="weather-card one float-right">
+        <div class="top" [ngClass]="weather.currently.icon">
           <div class="wrapper">
             <h1 class="heading">{{weather.currently.summary}}</h1>
             <h3 class="location">{{currentLocation.city}}</h3>
@@ -114,14 +120,12 @@
               <li class="active">
                 <span class="date">Tomorrow</span>
                 <span class="condition">
-                  <span class="temp">{{weather.daily.data[0].temperatureHigh | number:'1.0-0'}}
-                    <span class="deg">0</span>
-                    <span class="temp-type">C</span>
-                  </span>
+                  <span class="temp">{{weather.daily.data[1].temperatureHigh | number:'1.0-0'}}°C</span>
                 </span>
-                <!-- <div class="row"> -->
-                <span class="summary">{{weather.daily.data[0].summary}}</span>
-                <!-- </div> -->
+              </li>
+              <div class="divider"></div>
+              <li class="active">
+                <div class="summary">{{weather.daily.data[1].summary}}</div>
               </li>
             </ul>
           </div>

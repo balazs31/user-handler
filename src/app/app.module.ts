@@ -1,21 +1,20 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes, Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
-import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes, Router } from "@angular/router";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
+import { HttpClientModule } from "@angular/common/http";
 
-import { AppComponent } from './app.component';
-import { PageNotFoundComponent }  from './page-not-found.component';
-import { NavbarComponent } from './pages/navbar/navbar.component';
-import { UserTableComponent } from './pages/user-table/user-table.component';
-import { AppRoutingModule }  from './app-routing.module';
+import { AppComponent } from "./app.component";
+import { PageNotFoundComponent } from "./page-not-found.component";
+import { NavbarComponent } from "./pages/navbar/navbar.component";
+import { UserTableComponent } from "./pages/user-table/user-table.component";
+import { AppRoutingModule } from "./app-routing.module";
 
-import { UserService } from './services/user.service';
-import { LocationService } from './services/location.service'
-import { WeatherService } from './services/weather.service'
-import { UserDetailComponent } from './pages/user-detail/user-detail.component';
-
+import { UserService } from "./services/user.service";
+import { LocationService } from "./services/location.service";
+import { WeatherService } from "./services/weather.service";
+import { UserDetailComponent } from "./pages/user-detail/user-detail.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +32,7 @@ import { UserDetailComponent } from './pages/user-detail/user-detail.component';
     HttpModule,
     HttpClientModule
   ],
-  providers: [ UserService, LocationService, WeatherService ],
-  bootstrap: [ AppComponent ]
+  providers: [UserService, LocationService, WeatherService],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

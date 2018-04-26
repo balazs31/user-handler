@@ -1,0 +1,23 @@
+div .table {
+    margin-top: 2vh;
+}
+
+.row .table-bar {
+    margin-top: 2vh
+}
+
+.col .table-bar .add-user-link {
+    float: right;
+}
+
+.search {
+    border: 0;
+    border-bottom: 10px;
+    border-color: rgb(181, 137, 238);
+    box-shadow: 0px 1px #b9afc5;
+    width: 60%;
+}
+
+a:not([href]):not([tabindex]) {
+    color: white;
+}

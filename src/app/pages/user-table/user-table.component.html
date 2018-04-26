@@ -1,34 +1,36 @@
-<div class="row">
-  <div class="col">
-    <input #search class="form-control search input-sm" type="text" placeholder="Search..." (keyup)="onSearch(search.value)">
+<div id="user-table" class="container">
+  <div class="row table-bar">
+    <div class="col table-bar">
+      <input #search class="search form-control input-sm float-left" type="text" placeholder="Search..." (keyup)="onSearch(search.value)">
+      <a class="add-user-link btn btn-success float-right" [routerLink]="['/user-detail/', 'add']" role="button">Add user</a>
+    </div>
+    <!-- <div class="col">
+    </div> -->
   </div>
-  <div class="col">
-    <a class="btn btn-success" [routerLink]="['/user-detail/', 'add']" role="button">Add user</a>
-  </div>
-</div>
-<div class="row">
-  <table id="userTable" class="table table-responsive-lg">
-  <thead class="thead-dark">
-    <tr>
-      <th *ngFor="let column of columns" scope="col">{{column}}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of filteredUsers">
-      <th scope="row">{{user.id}}</th>
-      <td>{{user.username}}</td>
-      <td>{{user.firstName}}</td>
-      <td>{{user.lastName}}</td>
-      <td>{{user.email}}</td>
-      <td>{{user.location}}</td>
-      <td>{{user.phone}}</td>
-      <td>
-        <a class="btn btn-success" [routerLink]="['/user-detail/', 'edit', user.id]" role="button">Edit</a>
-        <a class="btn btn-danger" role="button" (click)="onDelete(user)">Delete</a>
-      </td>
-    </tr>
-  </tbody>
+  <!-- <div class="row table"> -->
+  <!-- <div class="col"> -->
+  <table id="userTable" class="table table-fixed table-bordered table-responsive-lg">
+    <thead class="thead-light">
+      <tr>
+        <th *ngFor="let column of columns" scope="col">{{column}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <th scope="row">{{user.id}}</th>
+        <td>{{user.username}}</td>
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.location}}</td>
+        <td>{{user.phone}}</td>
+        <td>
+          <a class="btn btn-success edit-user" [routerLink]="['/user-detail/', 'edit', user.id]" role="button">Edit</a>
+          <a class="btn btn-danger delete-user" role="button" (click)="onDelete(user)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
   </table>
-  </div>
-
-
+  <!-- </div> -->
+  <!-- </div> -->
+</div>

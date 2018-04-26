@@ -1,75 +1,84 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { User } from '../../models/user';
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { UserService } from "../../services/user.service";
+import { User } from "../../models/user";
+import { Constants } from "../../constants/constants";
 
 declare var swal: any;
 
 @Component({
-  selector: 'user-table',
-  templateUrl: './user-table.component.html',
-  styleUrls: ['./user-table.component.css']
+  selector: "user-table",
+  templateUrl: "./user-table.component.html",
+  styleUrls: ["./user-table.component.css"]
 })
 export class UserTableComponent {
   users: User[] = [];
   filteredUsers: User[];
-  columns: Array<string> = ["#", "Username", "First", "Last", "Email", "Location", "Phone", "Modify"];
-  constructor(private userService: UserService) { }
-  
+  columns: Array<string> = [
+    "#",
+    "Username",
+    "First",
+    "Last",
+    "Email",
+    "Location",
+    "Phone",
+    "Modify"
+  ];
+  constructor(private userService: UserService) {}
+
   ngOnInit() {
     this.getUsers();
   }
 
-  getUsers() : void {
-    this.userService.getUsers().subscribe(((users) => {
-      for(let user of users) {
+  getUsers(): void {
+    this.userService.getUsers().subscribe(users => {
+      for (let user of users) {
         this.users.push(this.userService.createUserObject(user));
       }
 
       this.filteredUsers = this.users;
-    }));
+    });
   }
 
   onDelete(user: User): void {
     swal({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if(result.value) {
-          this.userService.deleteUser(user.id)
-          .subscribe((response) => {
-            if(response.status == 200) {
+      title: Constants.ALERTS.TITLE.CONFIRM_CHOICE,
+      text: Constants.ALERTS.MESSAGE.CONFIRM_CHOICE,
+      type: Constants.ALERTS.TYPE.WARNING,
+      showCancelButton: true,
+      confirmButtonColor: Constants.ALERTS.BUTTON_COLOR.CONFIRM,
+      cancelButtonColor: Constants.ALERTS.BUTTON_COLOR.CANCEL,
+      confirmButtonText: Constants.ALERTS.BUTTON_TEXT.CONFIRM_DELETE_USER
+    }).then(result => {
+      if (result.value) {
+        this.userService.deleteUser(user.id).subscribe(
+          response => {
+            if (response.status == 200) {
               swal(
-                  'Deleted!',
-                  'User has been deleted.',
-                  'success'
+                Constants.ALERTS.TITLE.CREATED,
+                Constants.ALERTS.MESSAGE.USER_DELETED,
+                Constants.ALERTS.TYPE.SUCCESS
               );
 
-            
               let index = this.filteredUsers.indexOf(user);
               this.filteredUsers.splice(index, 1);
-            } 
-          }, (err) => {
+            }
+          },
+          err => {
             swal(
-              'Error!',
-              'Could not delete user. Please try again later!',
-              'error'
-          );
-          });
-        }   
+              Constants.ALERTS.TITLE.ERROR,
+              Constants.ALERTS.MESSAGE.ERROR_MESSAGE,
+              Constants.ALERTS.TYPE.ERROR
+            );
+          }
+        );
+      }
     });
   }
 
   onSearch(query: string): void {
     this.filteredUsers = [];
-
-    console.log('Users to string: ', this.users.toString )
-    for(let user of this.users) {
-      if(user.toString().indexOf(query) >= 0) {
+    for (let user of this.users) {
+      if (user.toString().indexOf(query) >= 0) {
         this.filteredUsers.push(user);
       }
     }

@@ -9,7 +9,7 @@ import { ValidateUsernameNotTaken } from "../../validators/username.validator";
 import { ValidatePasswords } from "../../validators/password.validator";
 import { ValidateEmailNotTaken } from "../../validators/email.validator";
 import { Subject } from "rxjs/Subject";
-
+import { Constants } from "../../constants/constants";
 declare var swal: any;
 
 @Component({
@@ -18,15 +18,15 @@ declare var swal: any;
   styleUrls: ["./user-detail.component.css"]
 })
 export class UserDetailComponent implements OnInit {
+  private VALIDATOR_MESSAGES;
   private user: User;
-  private userId: number;
+  private userForm: FormGroup;
   private role: string;
   private action = <any>{};
-  private searchTerm$ = new Subject<string>();
-  private userSearchResult: Object = [];
-  private userForm: FormGroup;
   private currentLocation: any = {};
   private weather: any;
+  private userId: number;
+
   constructor(
     private locationService: LocationService,
     private userService: UserService,
@@ -34,19 +34,8 @@ export class UserDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private fb: FormBuilder
   ) {
-    this.action = {
-      value: "editUser",
-      options: {
-        edit: "editUser",
-        add: "addUser"
-      },
-      titles: {
-        edit: "Edit user",
-        add: "Add user"
-      },
-      currentTitle: "Edit user"
-    };
-
+    this.VALIDATOR_MESSAGES = Constants.VALIDATOR_MESSAGES;
+    this.action = Constants.COMPONENTS.USER_DETAIL.ACTIONS;
     this.locationService.getCurrentIpLocation().subscribe(location => {
       this.currentLocation.city = location.city;
       this.currentLocation.loc = location.loc;
@@ -65,11 +54,9 @@ export class UserDetailComponent implements OnInit {
             this.findUserById(this.userId);
           } else {
             this.switchToAddUser();
-            // this.createUserForm();
           }
         } else {
           this.switchToAddUser();
-          // this.createUserForm();
         }
       } else if (this.role == "add") {
         this.action.value = this.action.options.add;
@@ -101,7 +88,7 @@ export class UserDetailComponent implements OnInit {
           Validators.required,
           Validators.minLength(4),
           Validators.maxLength(20),
-          Validators.pattern("^([a-zA-Z0-9_]){4,20}")
+          Validators.pattern(Constants.PATTERNS.USERNAME)
         ]),
         ValidateUsernameNotTaken.createValidator(
           this.userService,
@@ -110,11 +97,19 @@ export class UserDetailComponent implements OnInit {
       ],
       firstName: [
         this.user.firstName,
-        Validators.compose([Validators.required, Validators.minLength(2)])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(Constants.PATTERNS.FIRST_NAME)
+        ])
       ],
       lastName: [
         this.user.lastName,
-        Validators.compose([Validators.required, Validators.minLength(2)])
+        Validators.compose([
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(Constants.PATTERNS.LAST_NAME)
+        ])
       ],
       currentPassword: [
         this.user.password,
@@ -122,7 +117,7 @@ export class UserDetailComponent implements OnInit {
           this.action.value == this.action.options.edit
             ? Validators.required
             : null,
-          Validators.minLength(8)
+          ValidatePasswords.checkCurrentPassword(this.user.password)
         ])
       ],
       newPasswords: this.fb.group(
@@ -133,9 +128,7 @@ export class UserDetailComponent implements OnInit {
               this.action.value == this.action.options.add
                 ? Validators.required
                 : null,
-              Validators.pattern(
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&+])[A-Za-z\d$@$!%*?&+]{8,}/
-              )
+              Validators.pattern(Constants.PATTERNS.PASSWORD)
             ])
           ],
           newPassword2: [
@@ -162,9 +155,7 @@ export class UserDetailComponent implements OnInit {
         this.user.phone,
         Validators.compose([
           Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(20),
-          Validators.pattern(/^\+[0-9]{8,12}|^[0-9]{7,12}/)
+          Validators.pattern(Constants.PATTERNS.PHONE)
         ])
       ]
     });
@@ -196,18 +187,27 @@ export class UserDetailComponent implements OnInit {
   }
 
   public updateOrCreate(userFormData): void {
-    console.log("trying to update");
     if (this.checkIfPasswordsMatch(userFormData.currentPassword)) {
       this.userService
         .updateUser(this.parseUserFormData(userFormData))
         .subscribe(
           response => {
             if (response.status == 200) {
-              swal("Created!", "User has been created.", "success");
+              swal(
+                this.action.value == this.action.options.add
+                  ? Constants.ALERTS.TITLE.CREATED
+                  : Constants.ALERTS.TITLE.UPDATED,
+                Constants.ALERTS.MESSAGE.USER_CREATED,
+                Constants.ALERTS.TYPE.SUCCESS
+              );
             }
           },
           error => {
-            swal("Whoops!", "Something went wrong. Please try later!", "error");
+            swal(
+              Constants.ALERTS.TITLE.ERROR,
+              Constants.ALERTS.MESSAGE.ERROR_MESSAGE,
+              Constants.ALERTS.TYPE.ERROR
+            );
           }
         );
     }
@@ -226,8 +226,8 @@ export class UserDetailComponent implements OnInit {
     console.log(userFormData);
     if (
       this.user.password != userFormData.newPasswords.newPassword1 &&
-      userFormData.newPasswords.newPassword1 ==
-        userFormData.newPasswords.newPassword2
+      userFormData.newPasswords.newPassword1 != "" &&
+      userFormData.newPasswords.newPassword1 == userFormData.newPasswords.newPassword2
     ) {
       password = userFormData.newPasswords.newPassword1;
     } else {
