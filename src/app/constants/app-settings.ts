@@ -19,4 +19,11 @@ export class AppSettings {
     };
     public static LOCATION_API_ENDPONT = "http://ipinfo.io";
     public static CORS_PROXY_ENDPOINT = "https://cors-anywhere.herokuapp.com/";
+    public static GOOGLE_MAPS_GEOCODE_API = {
+        ENDPOINT: "https://maps.googleapis.com/maps/api/geocode/json",
+        FILTERS: {
+            ADDRESS: "?address="
+        },
+        KEY: "&key=AIzaSyD1bKNNRENJc0XcYxUPTeK8k4Zh2DUm5T0"
+    } 
 }

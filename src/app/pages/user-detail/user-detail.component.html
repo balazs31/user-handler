@@ -33,8 +33,8 @@
           <label for="firstname">First name</label>
           <input type="text" class="form-control" name="firstname" id="firstname" [formControl]="userForm.controls['firstName']" [readonly]="action.value==action.options.edit">
           <div *ngIf="userForm.controls['firstName'].hasError('required') && userForm.controls['firstName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
-          <div *ngIf="userForm.controls['lastName'].hasError('minlength') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.FIRST_NAME.MIN_LENGTH}}</div>
-          <div *ngIf="userForm.controls['lastName'].hasError('pattern') && userForm.controls['lastName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.FIRST_NAME.PATTERN}}</div>
+          <div *ngIf="userForm.controls['firstName'].hasError('minlength') && userForm.controls['firstName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.FIRST_NAME.MIN_LENGTH}}</div>
+          <div *ngIf="userForm.controls['firstName'].hasError('pattern') && userForm.controls['firstName'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.FIRST_NAME.PATTERN}}</div>
         </div>
 
         <div class="form-group">
@@ -49,7 +49,6 @@
           <label for="email">Email</label>
           <input type="text" class="form-control" name="email" id="email" [formControl]="userForm.controls['email']">
           <div *ngIf="userForm.controls['email'].hasError('required') && userForm.controls['email'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.REQUIRED}}</div>
-          <div *ngIf="userForm.controls['email'].hasError('email') && userForm.controls['email'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.EMAIL.PATTERN}}</div>
           <div *ngIf="userForm.controls['email'].hasError('email') && userForm.controls['email'].touched" class="alert alert-danger">{{VALIDATOR_MESSAGES.EMAIL.PATTERN}}</div>
           <div *ngIf="userForm.get('email').errors && userForm.get('email').errors.emailTaken" class="alert alert-danger">{{VALIDATOR_MESSAGES.EMAIL.TAKEN}}</div>
         </div>
@@ -99,7 +98,7 @@
       </form>
     </div>
 
-    <div *ngIf="weather" class="col-md-6 col-sm-2 text-center">
+    <div *ngIf="weather && currentLocation" class="col-md-6 col-sm-2 text-center">
       <div class="weather-card one float-right">
         <div class="top" [ngClass]="weather.currently.icon">
           <div class="wrapper">

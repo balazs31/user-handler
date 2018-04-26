@@ -4,11 +4,8 @@
       <input #search class="search form-control input-sm float-left" type="text" placeholder="Search..." (keyup)="onSearch(search.value)">
       <a class="add-user-link btn btn-success float-right" [routerLink]="['/user-detail/', 'add']" role="button">Add user</a>
     </div>
-    <!-- <div class="col">
     </div> -->
   </div>
-  <!-- <div class="row table"> -->
-  <!-- <div class="col"> -->
   <table id="userTable" class="table table-fixed table-bordered table-responsive-lg">
     <thead class="thead-light">
       <tr>

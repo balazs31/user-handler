@@ -23,13 +23,6 @@ export class ValidatePasswords {
     return null;
   }
 
-  // static checkCurrentPassword(control: AbstractControl, currentPass: string) {
-  //   let pass = control.get("currentPassword").value;
-  //   return pass == currentPass
-  //     ? control.get("currentPassword").setErrors({ matchPassword: true })
-  //     : null;
-  // }
-
   static checkCurrentPassword(currentPass: string): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } => {
       var pass: string = control.value;

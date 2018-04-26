@@ -10,6 +10,7 @@ import { ValidatePasswords } from "../../validators/password.validator";
 import { ValidateEmailNotTaken } from "../../validators/email.validator";
 import { Subject } from "rxjs/Subject";
 import { Constants } from "../../constants/constants";
+import { Address } from "../../models/address";
 declare var swal: any;
 
 @Component({
@@ -23,7 +24,7 @@ export class UserDetailComponent implements OnInit {
   private userForm: FormGroup;
   private role: string;
   private action = <any>{};
-  private currentLocation: any = {};
+  private currentLocation: Address;
   private weather: any;
   private userId: number;
 
@@ -36,11 +37,7 @@ export class UserDetailComponent implements OnInit {
   ) {
     this.VALIDATOR_MESSAGES = Constants.VALIDATOR_MESSAGES;
     this.action = Constants.COMPONENTS.USER_DETAIL.ACTIONS;
-    this.locationService.getCurrentIpLocation().subscribe(location => {
-      this.currentLocation.city = location.city;
-      this.currentLocation.loc = location.loc;
-      this.getWeather();
-    });
+    
   }
 
   ngOnInit() {
@@ -52,6 +49,7 @@ export class UserDetailComponent implements OnInit {
         if (params["id"]) {
           if (!Number.isNaN(this.userId)) {
             this.findUserById(this.userId);
+            
           } else {
             this.switchToAddUser();
           }
@@ -70,16 +68,26 @@ export class UserDetailComponent implements OnInit {
     this.userService.findUserById(userId).subscribe(user => {
       this.user = this.userService.createUserObject(user);
       this.createUserForm();
+      this.locationService.getGeocodeOfLocation(this.user.location).subscribe(location => {
+        this.currentLocation = this.locationService.parseGMapsLocation(location);
+        this.getWeather(this.currentLocation);
+      });
       console.log(this.user);
+    }, error =>{
+      swal(
+        Constants.ALERTS.TITLE.ERROR,
+        Constants.ALERTS.MESSAGE.ERROR_MESSAGE,
+        Constants.ALERTS.TYPE.ERROR
+      );
     });
   }
 
-  private getWeather() {
-    this.weatherService.getWeather(this.currentLocation.loc).subscribe(res => {
-      console.log(res);
+  private getWeather(location: Address) {
+    this.weatherService.getWeather(location.loc).subscribe(res => {
       this.weather = res;
     });
   }
+
   private createUserForm(): void {
     this.userForm = this.fb.group({
       username: [
@@ -170,8 +178,8 @@ export class UserDetailComponent implements OnInit {
 
   private switchToAddUser() {
     this.locationService.getCurrentIpLocation().subscribe(location => {
-      this.currentLocation.city = location.city;
-      this.currentLocation.loc = location.loc;
+      this.currentLocation = this.locationService.parseIpLocation(location)
+      this.getWeather(this.currentLocation);
       this.user = new User(
         NaN,
         "",

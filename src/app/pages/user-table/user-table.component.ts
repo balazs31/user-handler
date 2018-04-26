@@ -13,16 +13,7 @@ declare var swal: any;
 export class UserTableComponent {
   users: User[] = [];
   filteredUsers: User[];
-  columns: Array<string> = [
-    "#",
-    "Username",
-    "First",
-    "Last",
-    "Email",
-    "Location",
-    "Phone",
-    "Modify"
-  ];
+  columns: Array<string> = Constants.USER_TABLE.COLUMNS;
   constructor(private userService: UserService) {}
 
   ngOnInit() {
@@ -30,13 +21,21 @@ export class UserTableComponent {
   }
 
   getUsers(): void {
-    this.userService.getUsers().subscribe(users => {
-      for (let user of users) {
-        this.users.push(this.userService.createUserObject(user));
+    this.userService.getUsers().subscribe(
+      users => {
+        for (let user of users) {
+          this.users.push(this.userService.createUserObject(user));
+        }
+        this.filteredUsers = this.users;
+      },
+      error => {
+        swal(
+          Constants.ALERTS.TITLE.CREATED,
+          Constants.ALERTS.MESSAGE.USER_DELETED,
+          Constants.ALERTS.TYPE.SUCCESS
+        );
       }
-
-      this.filteredUsers = this.users;
-    });
+    );
   }
 
   onDelete(user: User): void {

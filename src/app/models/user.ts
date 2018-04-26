@@ -1,6 +1,5 @@
-import { Serializable } from "./serializable";
 
-export class User extends Serializable {
+export class User {
     constructor(
         public id: number,
         public username: string,
@@ -10,9 +9,7 @@ export class User extends Serializable {
         public location: string,
         public email: string,
         public phone: string,
-     ) {
-        super();
-    }
+     ) {}
 
     public toString(): string {
         return this.id.toString().toLowerCase() + ' ' +
